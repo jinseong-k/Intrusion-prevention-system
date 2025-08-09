@@ -1,0 +1,5 @@
+build/
+bin/
+test_pkt/
+run
+*.o
