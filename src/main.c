@@ -3,7 +3,7 @@
 #include "common.h"
 
 int main() {
-  init_run();
+  init_ips();
 
   start_thread();
 

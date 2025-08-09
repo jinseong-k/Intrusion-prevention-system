@@ -24,3 +24,4 @@ cmake ..
 make
 
 cp ${EXEC_FILE} ../${BIN_DIR}
+cp ${EXEC_FILE} ../
