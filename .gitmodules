@@ -1,0 +1,3 @@
+[submodule "lib/gotouniverse"]
+	path = lib/gotouniverse
+	url = git@github.com:jinseong-k/gotouniverse.git
