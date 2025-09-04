@@ -1,12 +1,16 @@
 #include <dirent.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <pcap.h>
 
 #include "common.h"
 #include "pkt_reader.h"
 #include "ips_util.h"
+
+extern ctx_t g_ctx;
 
 int move_file(char *src_file, char *dst_dir) {
   FILE *src_fp, *dst_fp;
@@ -42,11 +46,39 @@ int move_file(char *src_file, char *dst_dir) {
 }
 
 int process_packet(char *file_name) {
+  pcap_t *handle;
+  const unsigned char *pkt;
+  char errbuf[PCAP_ERRBUF_SIZE];
+  struct pcap_pkthdr header;
+  ctx_t *ctx = &g_ctx;
+  JS_QUEUE_t *q = ctx->pkt_read_q;
+  if (!q) {
+    fprintf(stderr, "[%s:%d] Queue is not read\n",
+        __func__, __LINE__);
+    return RET_FAIL;
+  }
+
   fprintf(stderr, "FILE_NAME : [%s]\n", file_name);
 
-  // TODO read file, enqueue pkt to decoder thread
+  handle = pcap_open_offline(file_name, errbuf);
+  if (handle == NULL) {
+    fprintf(stderr, "[%s:%d] Fail to read [%s]\n",
+        __func__, __LINE__, file_name);
+    return RET_FAIL;
+  }
 
-  return 1;
+  while ((pkt = pcap_next(handle, &header)) != NULL) {
+    if (QUEUE_FAIL == js_enqueue(q, (void *)pkt)) {
+      fprintf(stderr, "[%s:%d] Fail to enq to pkt_read_q\n",
+          __func__, __LINE__);
+      // If enqueue is fail, drop(pass) this packet.
+      // Just logging.
+    }
+  }
+
+  if (handle) pcap_close(handle);
+
+  return RET_OK;
 }
 
 #define READ_PKT_DIR "test_pkt"

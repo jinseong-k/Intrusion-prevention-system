@@ -5,6 +5,7 @@
 #include "common.h"
 #include "thr_manager.h"
 #include "pkt_reader.h"
+#include "pkt_decoder.h"
 
 THREAD_MGR g_thr_mgr;
 
@@ -27,6 +28,7 @@ void init_thread() {
   memset(&g_thr_mgr, 0x00, sizeof(g_thr_mgr));
   THREAD_MGR *thr_mgr = &g_thr_mgr;
 
+  run_thread(run_pkt_decode, "decode thread", (void *)&arg);
   run_thread(run_pkt_read, "read thread", (void *)&arg);
 
   for (thr_idx=0; thr_idx<thr_mgr->thread_cnt; thr_idx++) {

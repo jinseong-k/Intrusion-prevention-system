@@ -12,6 +12,7 @@ ADD_EXECUTABLE(run
     src/thr_manager.c
     src/pkt_reader.c
     src/ips_util.c
+    src/pkt_decoder.c
     )
-TARGET_LINK_LIBRARIES(run pthread common)
+TARGET_LINK_LIBRARIES(run pthread common pcap)
 ADD_COMPILE_OPTIONS(-Wall -Wextra)
