@@ -2,8 +2,9 @@ PROJECT(NIPS_Sample)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.25)
 
 
-INCLUDE_DIRECTORIES(src)
-#LINK_DIRECTORIES()
+INCLUDE_DIRECTORIES(src 
+    lib/gotouniverse/clang/src/libcommon/)
+LINK_DIRECTORIES(lib)
 #LINK_LIBRARIES(pthread)
 ADD_EXECUTABLE(run
     src/main.c
@@ -12,5 +13,5 @@ ADD_EXECUTABLE(run
     src/pkt_reader.c
     src/ips_util.c
     )
-TARGET_LINK_LIBRARIES(run pthread)
+TARGET_LINK_LIBRARIES(run pthread common)
 ADD_COMPILE_OPTIONS(-Wall -Wextra)

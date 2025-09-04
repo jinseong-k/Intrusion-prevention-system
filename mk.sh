@@ -11,6 +11,14 @@ if [ "clear" == "$1" ]; then
   exit 0
 fi
 
+# compile submodule
+if [ ! -f "lib/libcommon.a" ]; then
+  cd lib/gotouniverse/clang/src/
+  ./mk.sh
+  cd $RUN_DIR
+  cp lib/gotouniverse/clang/src/libcommon/build/libcommon.a lib/
+fi
+
 if [ ! -d "build" ]; then
   mkdir ${BUILD_DIR}
 fi

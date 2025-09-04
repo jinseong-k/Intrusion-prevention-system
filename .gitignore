@@ -1,6 +1,8 @@
 build/
 bin/
 test_pkt/
+post_pkt/
 run
 *.o
 *.swp
+*.a
